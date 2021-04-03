@@ -10,7 +10,7 @@ locals {
 
 module "website" {
   source               = "genstackio/website/aws"
-  version              = "0.1.24"
+  version              = "0.1.25"
   name                 = var.name
   bucket_name          = var.bucket_name
   zone                 = var.dns_zone
@@ -20,6 +20,7 @@ module "website" {
   forwarded_headers    = ["*"]
   apex_redirect        = var.apex_redirect
   lambdas              = local.lambdas
+  log_group_regions    = var.log_group_regions
   providers            = {
     aws     = aws
     aws.acm = aws.acm

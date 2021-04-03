@@ -27,3 +27,7 @@ variable "lambda_proxy_name" {
   type    = string
   default = null
 }
+variable "log_group_regions" {
+  type    = list(string)
+  default = []
+}
