@@ -10,7 +10,7 @@ locals {
 
 module "website" {
   source               = "genstackio/website/aws"
-  version              = "0.1.26"
+  version              = "0.1.27"
   name                 = var.name
   bucket_name          = var.bucket_name
   zone                 = var.dns_zone
