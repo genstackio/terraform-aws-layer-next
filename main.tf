@@ -1,27 +1,4 @@
 locals {
-  forwarded_headers = concat(
-    (null != var.forwarded_headers) ? var.forwarded_headers : [],
-    [
-      "CloudFront-Is-Android-Viewer",
-      "CloudFront-Is-Desktop-Viewer",
-      "CloudFront-Is-IOS-Viewer",
-      "CloudFront-Is-Mobile-Viewer",
-      "CloudFront-Is-SmartTV-Viewer",
-      "CloudFront-Is-Tablet-Viewer",
-      "CloudFront-Viewer-City",
-      "CloudFront-Viewer-Country",
-      "CloudFront-Viewer-Country-Name",
-      "CloudFront-Viewer-Country-Region",
-      "CloudFront-Viewer-Country-Region-Name",
-      "CloudFront-Viewer-Latitude",
-      "CloudFront-Viewer-Longitude",
-      "CloudFront-Viewer-Metro-Code",
-      "CloudFront-Viewer-Postal-Code",
-      "CloudFront-Viewer-Time-Zone",
-      "CloudFront-Forwarded-Proto",
-      "CloudFront-Viewer-Http-Version",
-    ]
-  )
   lambdas = concat(
     (null != var.lambdas) ? var.lambdas : [],
     [
@@ -40,7 +17,7 @@ module "website" {
   dns                  = var.dns
   geolocations         = var.geolocations
   forward_query_string = true
-  forwarded_headers    = local.forwarded_headers
+  forwarded_headers    = ["*"]
   apex_redirect        = var.apex_redirect
   lambdas              = local.lambdas
   providers            = {

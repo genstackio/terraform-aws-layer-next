@@ -23,10 +23,6 @@ variable "lambdas" {
   type    = list(any)
   default = null
 }
-variable "forwarded_headers" {
-  type    = list(string)
-  default = null
-}
 variable "lambda_proxy_name" {
   type    = string
   default = null
