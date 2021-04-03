@@ -3,7 +3,7 @@ locals {
     (null != var.forwarded_headers) ? var.forwarded_headers : [],
     [
       "CloudFront-Is-Android-Viewer",
-      "CloudFront-Is-Desktop-Viewer ",
+      "CloudFront-Is-Desktop-Viewer",
       "CloudFront-Is-IOS-Viewer",
       "CloudFront-Is-Mobile-Viewer",
       "CloudFront-Is-SmartTV-Viewer",
