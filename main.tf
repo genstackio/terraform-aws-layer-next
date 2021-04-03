@@ -20,7 +20,6 @@ module "website" {
   forwarded_headers    = ["*"]
   apex_redirect        = var.apex_redirect
   lambdas              = local.lambdas
-  log_group_regions    = var.log_group_regions
   providers            = {
     aws     = aws
     aws.acm = aws.acm
@@ -28,8 +27,9 @@ module "website" {
 }
 
 module "lambda-proxy" {
-  source      = "genstackio/website/aws//modules/lambda-proxy"
-  version     = "0.1.24"
-  name        = local.lambda_proxy_name
-  config_file = "${path.module}/config.js"
+  source            = "genstackio/website/aws//modules/lambda-proxy"
+  version           = "0.1.25"
+  name              = local.lambda_proxy_name
+  config_file       = "${path.module}/config.js"
+  log_group_regions = var.log_group_regions
 }
