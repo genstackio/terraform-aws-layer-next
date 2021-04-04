@@ -10,7 +10,7 @@ locals {
 
 module "website" {
   source                = "genstackio/website/aws"
-  version               = "0.1.31"
+  version               = "0.1.32"
   name                  = var.name
   bucket_name           = var.bucket_name
   zone                  = var.dns_zone
@@ -20,7 +20,9 @@ module "website" {
   forwarded_headers     = ["*"]
   apex_redirect         = var.apex_redirect
   lambdas               = local.lambdas
-  custom_origin_headers = []
+  custom_origin_headers = [
+    {name = "X-CloudFront-Edge-Next-DNS", value = var.dns}
+  ]
   providers             = {
     aws     = aws
     aws.acm = aws.acm
@@ -29,7 +31,7 @@ module "website" {
 
 module "lambda-proxy" {
   source            = "genstackio/website/aws//modules/lambda-proxy"
-  version           = "0.1.31"
+  version           = "0.1.32"
   name              = local.lambda_proxy_name
   config_file       = "${path.module}/config.js"
   log_group_regions = var.log_group_regions
