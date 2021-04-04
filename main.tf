@@ -9,18 +9,19 @@ locals {
 }
 
 module "website" {
-  source               = "genstackio/website/aws"
-  version              = "0.1.31"
-  name                 = var.name
-  bucket_name          = var.bucket_name
-  zone                 = var.dns_zone
-  dns                  = var.dns
-  geolocations         = var.geolocations
-  forward_query_string = true
-  forwarded_headers    = ["*"]
-  apex_redirect        = var.apex_redirect
-  lambdas              = local.lambdas
-  providers            = {
+  source                = "genstackio/website/aws"
+  version               = "0.1.31"
+  name                  = var.name
+  bucket_name           = var.bucket_name
+  zone                  = var.dns_zone
+  dns                   = var.dns
+  geolocations          = var.geolocations
+  forward_query_string  = true
+  forwarded_headers     = ["*"]
+  apex_redirect         = var.apex_redirect
+  lambdas               = local.lambdas
+  custom_origin_headers = []
+  providers             = {
     aws     = aws
     aws.acm = aws.acm
   }
