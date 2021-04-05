@@ -10,7 +10,7 @@ locals {
 
 module "website" {
   source                = "genstackio/website/aws"
-  version               = "0.1.37"
+  version               = "0.1.38"
   name                  = var.name
   bucket_name           = var.bucket_name
   zone                  = var.dns_zone
@@ -32,7 +32,7 @@ module "website" {
 
 module "config" {
   source      = "genstackio/website/aws//modules/private-website"
-  version     = "0.1.37"
+  version     = "0.1.38"
   name        = var.name
   bucket_name = "${var.bucket_name}-config"
   providers   = {
@@ -42,7 +42,7 @@ module "config" {
 
 module "lambda-proxy" {
   source            = "genstackio/website/aws//modules/lambda-proxy"
-  version           = "0.1.36"
+  version           = "0.1.38"
   name              = local.lambda_proxy_name
   config_file       = "${path.module}/config.js"
   log_group_regions = var.log_group_regions
