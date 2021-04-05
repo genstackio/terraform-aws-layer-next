@@ -89,7 +89,7 @@ module "api-api" {
   source     = "genstackio/apigateway2-api/aws"
   version    = "0.1.3"
   name       = local.lambda_api_name
-  lambda_arn = var.enable_api ? module.lambda-api.arn : null
+  lambda_arn = var.enable_api ? module.lambda-api[0].arn : null
   providers  = {
     aws = aws
   }

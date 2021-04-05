@@ -98,7 +98,8 @@ variable "api_variables" {
   default = {}
 }
 variable "package_file" {
-  type = string
+  type    = string
+  default = null
 }
 variable "dynamics_package_file" {
   type    = string
