@@ -25,7 +25,7 @@ module "website" {
 module "config" {
   count       = var.enable_config ? 1 : 0
   source      = "genstackio/website/aws//modules/private-website"
-  version     = "0.1.40"
+  version     = "0.1.41"
   name        = var.name
   bucket_name = local.config_bucket_name
   providers = {
@@ -35,7 +35,7 @@ module "config" {
 
 module "lambda-proxy" {
   source            = "genstackio/website/aws//modules/lambda-proxy"
-  version           = "0.1.40"
+  version           = "0.1.41"
   name              = local.lambda_proxy_name
   config_file       = "${path.module}/config.js"
   log_group_regions = var.log_group_regions
