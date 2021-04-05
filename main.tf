@@ -64,7 +64,13 @@ module "lambda-dynamics" {
   timeout           = local.lambda_dynamics_timeout
   memory_size       = local.lambda_dynamics_memory_size
   policy_statements = local.lambda_dynamics_policy_statements
-  variables         = local.lambda_dynamics_variables
+  variables         = merge(
+    local.lambda_dynamics_variables,
+    {
+      AWS_NEXT_PRODUCTION = "1"
+      AWS_NEXT_PROJECT_DIR = "/var/task"
+    }
+  )
   providers         = {
     aws = aws
   }
@@ -79,7 +85,13 @@ module "lambda-api" {
   timeout           = local.lambda_api_timeout
   memory_size       = local.lambda_api_memory_size
   policy_statements = local.lambda_api_policy_statements
-  variables         = local.lambda_api_variables
+  variables         = merge(
+    local.lambda_api_variables,
+    {
+      AWS_NEXT_PRODUCTION = "1"
+      AWS_NEXT_PROJECT_DIR = "/var/task"
+    }
+  )
   providers         = {
     aws = aws
   }
