@@ -1,6 +1,6 @@
 module.exports = () => ({
     custom: (...args) => {
-        console.log(args);
+        console.log(JSON.stringify(args, null, 4));
         return undefined;
     }
 })
