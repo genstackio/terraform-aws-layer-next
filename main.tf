@@ -28,6 +28,9 @@ module "config" {
   version     = "0.1.39"
   name        = var.name
   bucket_name = local.config_bucket_name
+  providers = {
+    aws = aws
+  }
 }
 
 module "lambda-proxy" {
@@ -51,6 +54,9 @@ module "lambda-dynamics" {
   memory_size       = local.lambda_dynamics_memory_size
   policy_statements = local.lambda_dynamics_policy_statements
   variables         = local.lambda_dynamics_variables
+  providers         = {
+    aws = aws
+  }
 }
 module "lambda-api" {
   count             = var.enable_api ? 1 : 0
@@ -63,6 +69,9 @@ module "lambda-api" {
   memory_size       = local.lambda_api_memory_size
   policy_statements = local.lambda_api_policy_statements
   variables         = local.lambda_api_variables
+  providers         = {
+    aws = aws
+  }
 }
 
 module "api-dynamics" {
@@ -71,6 +80,9 @@ module "api-dynamics" {
   version    = "0.1.3"
   name       = local.lambda_dynamics_name
   lambda_arn = var.enable_dynamics ? module.lambda-dynamics[0].arn : null
+  providers  = {
+    aws = aws
+  }
 }
 module "api-api" {
   count      = var.enable_api ? 1 : 0
@@ -78,4 +90,7 @@ module "api-api" {
   version    = "0.1.3"
   name       = local.lambda_api_name
   lambda_arn = var.enable_api ? module.lambda-api.arn : null
+  providers  = {
+    aws = aws
+  }
 }
