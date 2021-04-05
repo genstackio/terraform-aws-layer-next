@@ -55,9 +55,6 @@ variable "log_group_regions" {
   type    = list(string)
   default = []
 }
-variable "env" {
-  type = string
-}
 variable "policy_statements" {
   type = list(
   object({
