@@ -16,6 +16,7 @@ module "website" {
     var.enable_dynamics ? [{name = "X-CloudFront-Edge-Next-Dynamics-DNS", value = local.dynamics_dns}] : [],
     var.enable_api ? [{name = "X-CloudFront-Edge-Next-Api-DNS", value = local.api_dns}] : [],
     var.enable_statics ? [{name = "X-CloudFront-Edge-Next-Statics", value = "1"}] : [],
+    var.debug ? [{name = "X-CloudFront-Edge-Next-Debug", value = "1"}] : [],
   )
   providers             = {
     aws     = aws

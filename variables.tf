@@ -145,3 +145,7 @@ variable "api_handler" {
   type    = string
   default = null
 }
+variable "debug" {
+  type    = bool
+  default = false
+}
