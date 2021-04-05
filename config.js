@@ -11,7 +11,7 @@ module.exports = {
                 origin: {
                     custom: {
                         customHeaders: origin.custom.customHeaders,
-                        domainName: origin.custom.customHeaders['x-cloudfront-edge-next-api-dns'].value,
+                        domainName: origin.custom.customHeaders['x-cloudfront-edge-next-api-dns'][0].value,
                         keepaliveTimeout: 5,
                         path: '',
                         port: 443,
@@ -27,7 +27,7 @@ module.exports = {
             origin: {
                 custom: {
                     customHeaders: origin.custom.customHeaders,
-                    domainName: origin.custom.customHeaders['x-cloudfront-edge-next-dynamics-dns'].value,
+                    domainName: origin.custom.customHeaders['x-cloudfront-edge-next-dynamics-dns'][0].value,
                     keepaliveTimeout: 5,
                     path: '',
                     port: 443,
