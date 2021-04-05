@@ -18,7 +18,17 @@ module "website" {
     var.enable_statics ? [{name = "X-CloudFront-Edge-Next-Statics", value = "1"}] : [],
     var.debug ? [{name = "X-CloudFront-Edge-Next-Debug", value = "1"}] : [],
   )
-  providers             = {
+  custom_behaviors      = concat(
+    var.custom_behaviors,
+    var.enable_optimized_statics ? [
+      {
+        path_pattern             = "/_next/static/*"
+        origin_request_policy_id = data.aws_cloudfront_origin_request_policy.managed_cors_s3_origin.id
+        cache_policy_id          = data.aws_cloudfront_cache_policy.managed_caching_optimized.id
+      }
+    ] : []
+  )
+  providers         = {
     aws     = aws
     aws.acm = aws.acm
   }
@@ -26,7 +36,7 @@ module "website" {
 module "config" {
   count       = var.enable_config ? 1 : 0
   source      = "genstackio/website/aws//modules/private-website"
-  version     = "0.1.41"
+  version     = "0.1.42"
   name        = var.name
   bucket_name = local.config_bucket_name
   providers = {
@@ -36,7 +46,7 @@ module "config" {
 
 module "lambda-proxy" {
   source            = "genstackio/website/aws//modules/lambda-proxy"
-  version           = "0.1.41"
+  version           = "0.1.42"
   name              = local.lambda_proxy_name
   config_file       = "${path.module}/config.js"
   log_group_regions = var.log_group_regions

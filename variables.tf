@@ -13,6 +13,10 @@ variable "enable_statics" {
   type    = bool
   default = true
 }
+variable "enable_optimized_statics" {
+  type    = bool
+  default = false
+}
 variable "enable_dynamics" {
   type    = bool
   default = false
@@ -148,4 +152,8 @@ variable "api_handler" {
 variable "debug" {
   type    = bool
   default = false
+}
+variable "custom_behaviors" {
+  type    = list(any)
+  default = null
 }
