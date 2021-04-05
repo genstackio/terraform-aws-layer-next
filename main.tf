@@ -19,7 +19,7 @@ module "website" {
     var.debug ? [{name = "X-CloudFront-Edge-Next-Debug", value = "1"}] : [],
   )
   custom_behaviors      = concat(
-    var.custom_behaviors,
+    var.custom_behaviors != null ? var.custom_behaviors : [],
     var.enable_optimized_statics ? [
       {
         path_pattern             = "/_next/static/*"
