@@ -10,7 +10,7 @@ locals {
 
 module "website" {
   source                = "genstackio/website/aws"
-  version               = "0.1.36"
+  version               = "0.1.37"
   name                  = var.name
   bucket_name           = var.bucket_name
   zone                  = var.dns_zone
@@ -21,11 +21,22 @@ module "website" {
   apex_redirect         = var.apex_redirect
   lambdas               = local.lambdas
   custom_origin_headers = [
-    {name = "X-CloudFront-Edge-Next-DNS", value = var.dns}
+    {name = "X-CloudFront-Edge-Next-DNS", value = var.dns},
+    {name = "X-CloudFront-Edge-Next-Config-Url", value = "https://${module.config.dns}/proxy.json"},
   ]
   providers             = {
     aws     = aws
     aws.acm = aws.acm
+  }
+}
+
+module "config" {
+  source      = "genstackio/website/aws//modules/private-website"
+  version     = "0.1.37"
+  name        = var.name
+  bucket_name = "${var.bucket_name}-config"
+  providers   = {
+    aws = aws
   }
 }
 
