@@ -52,7 +52,7 @@ module "lambda-proxy" {
   name              = local.lambda_proxy_name
   config_file       = "${path.module}/config.js"
   providers         = {
-    aws.us-east-1 = aws.us-east-1
+    aws = aws.us-east-1
   }
 }
 module "lambda-next-edge" {
