@@ -9,6 +9,10 @@ variable "enable_config" {
   type    = bool
   default = false
 }
+variable "enable_next_edge" {
+  type    = bool
+  default = false
+}
 variable "enable_statics" {
   type    = bool
   default = true
@@ -43,6 +47,10 @@ variable "lambdas" {
   type    = list(any)
   default = null
 }
+variable "lambda_next_edge_name" {
+  type    = string
+  default = null
+}
 variable "lambda_proxy_name" {
   type    = string
   default = null
@@ -60,6 +68,16 @@ variable "log_group_regions" {
   default = []
 }
 variable "policy_statements" {
+  type = list(
+  object({
+    actions   = list(string),
+    resources = list(string),
+    effect    = string
+  })
+  )
+  default = []
+}
+variable "next_edge_policy_statements" {
   type = list(
   object({
     actions   = list(string),
@@ -105,6 +123,10 @@ variable "package_file" {
   type    = string
   default = null
 }
+variable "next_edge_package_file" {
+  type    = string
+  default = null
+}
 variable "dynamics_package_file" {
   type    = string
   default = null
@@ -116,6 +138,10 @@ variable "api_package_file" {
 variable "memory_size" {
   type    = number
   default = 1024
+}
+variable "next_edge_memory_size" {
+  type    = number
+  default = null
 }
 variable "dynamics_memory_size" {
   type    = number
@@ -129,6 +155,10 @@ variable "timeout" {
   type    = number
   default = 30
 }
+variable "next_edge_timeout" {
+  type    = number
+  default = null
+}
 variable "dynamics_timeout" {
   type    = number
   default = null
@@ -139,13 +169,37 @@ variable "api_timeout" {
 }
 variable "handler" {
   type    = string
-  default = "node_modules/@ohoareau/aws-apigw-next/lib/index.handler"
+  default = "node_modules/@ohoareau/aws-lambda-next/lib/index.handler"
+}
+variable "next_edge_handler" {
+  type    = string
+  default = null
 }
 variable "dynamics_handler" {
   type    = string
   default = null
 }
 variable "api_handler" {
+  type    = string
+  default = null
+}
+variable "runtime" {
+  type    = string
+  default = null
+}
+variable "next_edge_runtime" {
+  type    = string
+  default = null
+}
+variable "proxy_runtime" {
+  type    = string
+  default = null
+}
+variable "dynamics_runtime" {
+  type    = string
+  default = null
+}
+variable "api_runtime" {
   type    = string
   default = null
 }

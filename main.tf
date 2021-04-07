@@ -13,6 +13,7 @@ module "website" {
   custom_origin_headers = concat(
     [{name = "X-Forwarded-For", value = var.dns}],
     var.enable_config ? [{name = "X-CloudFront-Edge-Next-Config-Url", value = local.config_url}] : [],
+    var.enable_next_edge ? [{name = "X-CloudFront-Edge-Next-At-Edge", value = "1"}] : [],
     var.enable_dynamics ? [{name = "X-CloudFront-Edge-Next-Dynamics-DNS", value = local.dynamics_dns}] : [],
     var.enable_api ? [{name = "X-CloudFront-Edge-Next-Api-DNS", value = local.api_dns}] : [],
     var.enable_statics ? [{name = "X-CloudFront-Edge-Next-Statics", value = "1"}] : [],
@@ -45,6 +46,7 @@ module "config" {
 }
 
 module "lambda-proxy" {
+  count             = !var.enable_next_edge ? 1 : 0
   source            = "genstackio/website/aws//modules/lambda-proxy"
   version           = "0.1.42"
   name              = local.lambda_proxy_name
@@ -54,6 +56,35 @@ module "lambda-proxy" {
     aws = aws
   }
 }
+module "lambda-next-edge" {
+  count             = var.enable_next_edge ? 1 : 0
+  source            = "genstackio/lambda/aws"
+  version           = "0.1.8"
+  runtime           = local.lambda_next_edge_runtime
+  file              = local.lambda_next_edge_package_file
+  name              = local.lambda_next_edge_name
+  handler           = local.lambda_next_edge_handler
+  timeout           = local.lambda_next_edge_timeout
+  memory_size       = local.lambda_next_edge_memory_size
+  policy_statements = local.lambda_next_edge_policy_statements
+  publish           = true
+  assume_role_identifiers = ["edgelambda.amazonaws.com"]
+  providers = {
+    aws = aws.us-east-1
+  }
+}
+
+module "regional-log-groups" {
+  count   = var.enable_next_edge ? 1 : 0
+  source  = "genstackio/lambda/aws//modules/regional-log-groups"
+  version = "0.1.8"
+  name    = local.lambda_next_edge_name
+  regions = var.log_group_regions
+  providers = {
+    aws = aws.us-east-1
+  }
+}
+
 module "lambda-dynamics" {
   count             = var.enable_dynamics ? 1 : 0
   source            = "genstackio/lambda/aws"
