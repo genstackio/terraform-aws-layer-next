@@ -1,6 +1,6 @@
 module "website" {
   source                = "genstackio/website/aws"
-  version               = "0.1.43"
+  version               = "0.1.44"
   name                  = var.name
   bucket_name           = var.bucket_name
   zone                  = var.dns_zone
@@ -37,7 +37,7 @@ module "website" {
 module "config" {
   count       = var.enable_config ? 1 : 0
   source      = "genstackio/website/aws//modules/private-website"
-  version     = "0.1.43"
+  version     = "0.1.44"
   name        = var.name
   bucket_name = local.config_bucket_name
   providers = {
@@ -48,7 +48,7 @@ module "config" {
 module "lambda-proxy" {
   count             = !var.enable_next_edge ? 1 : 0
   source            = "genstackio/website/aws//modules/lambda-proxy"
-  version           = "0.1.43"
+  version           = "0.1.44"
   name              = local.lambda_proxy_name
   config_file       = "${path.module}/config.js"
   providers         = {
