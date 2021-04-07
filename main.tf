@@ -75,11 +75,10 @@ module "lambda-next-edge" {
 }
 
 module "regional-log-groups" {
-  count   = var.enable_next_edge ? 1 : 0
   source  = "genstackio/lambda/aws//modules/regional-log-groups"
   version = "0.1.8"
   name    = local.lambda_next_edge_name
-  regions = var.log_group_regions
+  regions = var.enable_next_edge ? var.log_group_regions : []
   providers = {
     aws = aws.us-east-1
   }
