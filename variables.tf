@@ -185,7 +185,7 @@ variable "api_handler" {
 }
 variable "runtime" {
   type    = string
-  default = null
+  default = "nodejs12.x"
 }
 variable "next_edge_runtime" {
   type    = string
