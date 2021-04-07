@@ -17,16 +17,16 @@ output "statics_bucket_id" {
   value = var.enable_statics ? module.website.bucket_id : null
 }
 output "lambda_proxy_arn" {
-  value = module.lambda-proxy.arn
+  value = !var.enable_next_edge ? module.lambda-proxy[0].arn : null
 }
 output "lambda_proxy_qualified_arn" {
-  value = module.lambda-proxy.qualified_arn
+  value = !var.enable_next_edge ? module.lambda-proxy[0].qualified_arn : null
 }
 output "lambda_proxy_name" {
-  value = module.lambda-proxy.name
+  value = !var.enable_next_edge ? module.lambda-proxy[0].name : null
 }
 output "lambda_proxy_role_name" {
-  value = module.lambda-proxy.role_name
+  value = !var.enable_next_edge ? module.lambda-proxy[0].role_name : null
 }
 output "lambda_dynamics_arn" {
   value = var.enable_dynamics ? module.lambda-dynamics[0].arn : null
