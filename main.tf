@@ -1,6 +1,6 @@
 module "website" {
   source                = "genstackio/website/aws"
-  version               = "0.1.45"
+  version               = "0.1.46"
   name                  = var.name
   bucket_name           = var.bucket_name
   zone                  = var.dns_zone
@@ -14,7 +14,9 @@ module "website" {
   error_document        = var.error_document
   default_root_object   = var.default_root_object
   error_403_page_path   = var.error_403_page_path
+  error_403_page_code   = var.error_403_page_code
   error_404_page_path   = var.error_404_page_path
+  error_404_page_code   = var.error_404_page_code
   custom_origin_headers = concat(
     [{name = "X-Forwarded-For", value = var.dns}],
     var.enable_config ? [{name = "X-CloudFront-Edge-Next-Config-Url", value = local.config_url}] : [],
