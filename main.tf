@@ -10,6 +10,7 @@ module "website" {
   forwarded_headers     = ["*"]
   apex_redirect         = var.apex_redirect
   lambdas               = local.lambdas
+  index_document        = var.index_document
   custom_origin_headers = concat(
     [{name = "X-Forwarded-For", value = var.dns}],
     var.enable_config ? [{name = "X-CloudFront-Edge-Next-Config-Url", value = local.config_url}] : [],

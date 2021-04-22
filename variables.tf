@@ -211,3 +211,7 @@ variable "custom_behaviors" {
   type    = list(any)
   default = null
 }
+variable "index_document" {
+  type    = string
+  default = null
+}
