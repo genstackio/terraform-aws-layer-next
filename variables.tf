@@ -213,5 +213,21 @@ variable "custom_behaviors" {
 }
 variable "index_document" {
   type    = string
+  default = ""
+}
+variable "error_document" {
+  type    = string
+  default = "404"
+}
+variable "default_root_object" {
+  type    = string
   default = null
+}
+variable "error_403_page_path" {
+  type    = string
+  default = "403"
+}
+variable "error_404_page_path" {
+  type    = string
+  default = "404"
 }
