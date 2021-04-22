@@ -225,7 +225,7 @@ variable "default_root_object" {
 }
 variable "error_403_page_path" {
   type    = string
-  default = "403"
+  default = "/403"
 }
 variable "error_403_page_code" {
   type    = number
@@ -233,7 +233,7 @@ variable "error_403_page_code" {
 }
 variable "error_404_page_path" {
   type    = string
-  default = "404"
+  default = "/404"
 }
 variable "error_404_page_code" {
   type    = number
