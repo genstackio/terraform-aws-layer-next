@@ -92,7 +92,7 @@ resource "aws_cloudfront_distribution" "webapp" {
       cookies {
         forward = "all"
       }
-      headers = ["*"]
+      headers = local.forwarded_headers
     }
 
     min_ttl                = 0
@@ -149,7 +149,7 @@ resource "aws_cloudfront_distribution" "webapp" {
       cookies {
         forward = "all"
       }
-      headers = ["*"]
+      headers = local.forwarded_headers
     }
   }
 
@@ -168,7 +168,7 @@ resource "aws_cloudfront_distribution" "webapp" {
       cookies {
         forward = "all"
       }
-      headers = ["*"]
+      headers = local.forwarded_headers
     }
   }
 
