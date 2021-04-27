@@ -15,5 +15,5 @@ module "cdn" {
   redirect_config_file = var.redirect_config_file
   security_config_file = var.security_config_file
   name                 = var.name
-  custom_behaviours    = var.custom_behaviors
+  custom_behaviors     = var.custom_behaviors
 }
