@@ -1,7 +1,11 @@
 module "https-cert" {
-  source = "./modules/https-cert"
-  dns    = var.dns
-  zone   = var.dns_zone
+  source    = "./modules/https-cert"
+  dns       = var.dns
+  zone      = var.dns_zone
+  providers = {
+    aws     = aws
+    aws.acm = aws.acm
+  }
 }
 
 module "cdn" {
@@ -16,4 +20,7 @@ module "cdn" {
   security_config_file = var.security_config_file
   name                 = var.name
   custom_behaviors     = var.custom_behaviors
+  providers            = {
+    aws = aws
+  }
 }
