@@ -75,7 +75,7 @@ resource "aws_cloudfront_distribution" "webapp" {
     lambda_function_association {
       event_type   = "origin-response"
       lambda_arn   = module.lambda-origin-response.qualified_arn
-      include_body = true
+      include_body = false
     }
   }
 
@@ -96,7 +96,7 @@ resource "aws_cloudfront_distribution" "webapp" {
     lambda_function_association {
       event_type   = "origin-response"
       lambda_arn   = module.lambda-origin-response.qualified_arn
-      include_body = true
+      include_body = false
     }
   }
 
@@ -117,7 +117,7 @@ resource "aws_cloudfront_distribution" "webapp" {
     lambda_function_association {
       event_type   = "origin-response"
       lambda_arn   = module.lambda-origin-response.qualified_arn
-      include_body = true
+      include_body = false
     }
   }
 
@@ -146,7 +146,7 @@ resource "aws_cloudfront_distribution" "webapp" {
     lambda_function_association {
       event_type   = "origin-response"
       lambda_arn   = module.lambda-origin-response.qualified_arn
-      include_body = true
+      include_body = false
     }
   }
 
