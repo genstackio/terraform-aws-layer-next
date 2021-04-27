@@ -1,4 +1,4 @@
-const {buildDefaultResponse, getResponseForRequest} = require('./utils');
+const {buildDefaultResponse, processRequest} = require('./utils');
 
 const handler = async event => {
     const records = ((event || {})['Records'] || []);
@@ -6,7 +6,7 @@ const handler = async event => {
     const request = ((records[0] || {})['cf'] || {})['request'];
     if (!request) return buildDefaultResponse();
 
-    return getResponseForRequest(request);
+    return processRequest(request);
 };
 
 module.exports = {handler}

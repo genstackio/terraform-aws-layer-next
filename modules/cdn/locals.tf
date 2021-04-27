@@ -17,4 +17,6 @@ locals {
     "Access-Control-Request-Method",
     "User-Agent",
   ]
+  header_x_next_buckets = jsonencode({for k, v in var.regional_statics_buckets : k => {domain: v.domain}})
+  header_x_next_apps    = jsonencode({for k, v in var.regional_next_apps : k => {domain: v.domain}})
 }

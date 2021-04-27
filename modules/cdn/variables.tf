@@ -38,3 +38,18 @@ variable "custom_behaviors" {
 variable "s3_master_domain_name" {
   type = string
 }
+variable "regional_next_apps" {
+  type = map(object({
+    endpoint = string
+    domain = string
+  }))
+  default = {}
+}
+variable "regional_statics_buckets" {
+  type = map(object({
+    arn  = string
+    name = string
+    domain = string
+  }))
+  default = {}
+}

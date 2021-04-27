@@ -1,25 +1,35 @@
-const buildDefaultResponse = () => ({
-    status: '404',
-    statusDescription: 'Not Found',
-    headers: {
-        'cache-control': [{
-            key: 'Cache-Control',
-            value: 'no-cache'
-        }],
-        'content-type': [{
-            key: 'Content-Type',
-            value: 'text/plain'
-        }]
-    },
-    body: 'Not Found',
-});
+function buildDefaultResponse() {
+    return {
+        status: '404',
+        statusDescription: 'Not Found',
+        headers: {
+            'cache-control': [{
+                key: 'Cache-Control',
+                value: 'no-cache'
+            }],
+            'content-type': [{
+                key: 'Content-Type',
+                value: 'text/plain'
+            }]
+        },
+        body: 'Not Found',
+    };
+}
 
-const isHostMatching = (a, b) => !a ? false : (('string' === typeof a) ? (a === b) : !!b.match(a));
-const isUriMatching = (a, b) => !a ? false : (('string' === typeof a) ? (a === b) : !!b.match(a));
-const applyTest = (a, b) => !a ? false : (('function' === typeof a) ? !!a(b) : false);
-const isCountryMatching = (a, b) => !a ? false : (Array.isArray(a) ? a.includes(b) : (a === b));
+function isHostMatching(a, b) {
+    return !a ? false : (('string' === typeof a) ? (a === b) : !!b.match(a));
+}
+function isUriMatching(a, b) {
+    return !a ? false : (('string' === typeof a) ? (a === b) : !!b.match(a));
+}
+function applyTest(a, b) {
+    return !a ? false : (('function' === typeof a) ? !!a(b) : false);
+}
+function isCountryMatching(a, b) {
+    return !a ? false : (Array.isArray(a) ? a.includes(b) : (a === b));
+}
 
-const matchRuleAndOptionallyUpdateRule = (rule, context) => {
+function matchRuleAndOptionallyUpdateRule(rule, context) {
     let r = undefined;
     // noinspection PointlessBooleanExpressionJS
     rule.host && (r = ((undefined !== r) ? r : true) && isHostMatching(rule.host, context.host));
@@ -33,18 +43,20 @@ const matchRuleAndOptionallyUpdateRule = (rule, context) => {
         }
         r = r && !!testResult;
     }
-
     return r;
 }
 
-const getHeaderFromRequest = (request, name, defaultValue = undefined) => {
+function getHeaderFromRequest(request, name, defaultValue = undefined) {
     const headers = getHeadersFromRequest(request);
     const value = ((headers[name] || headers[(name || '').toLowerCase()] || [])[0] || {}).value;
     return (undefined === value) ? defaultValue : value;
 }
-const getHeadersFromRequest = request => request.headers || [];
 
-const getUriFromRequest = (request, {refererMode = false} = {}) => {
+function getHeadersFromRequest(request) {
+    return request.headers || [];
+}
+
+function getUriFromRequest(request, {refererMode = false} = {}) {
     if (!refererMode) return request.uri;
     let host = getHeaderFromRequest(request, 'Host');
     let referer = getHeaderFromRequest(request, 'Referer');
@@ -52,7 +64,7 @@ const getUriFromRequest = (request, {refererMode = false} = {}) => {
     return request.uri;
 }
 
-const getRedirectResponseIfExistFromConfig = (request, config) => {
+async function getRedirectResponseIfExistFromConfig(request, config) {
     const context = {
         host: getHeaderFromRequest(request, 'Host'),
         uri: getUriFromRequest(request, config),
@@ -62,14 +74,10 @@ const getRedirectResponseIfExistFromConfig = (request, config) => {
     return ((config || {}).redirects || []).find(
         rule => matchRuleAndOptionallyUpdateRule(rule, context, request)
     );
-};
+}
 
-const getRedirectResponseIfExistForRequest = request => {
-    let config = require('./config');
-    if ('function' === typeof config) config = config(request);
-
-    const rule = getRedirectResponseIfExistFromConfig(request, config);
-
+async function getRedirectResponseIfExistForRequest(request, config) {
+    const rule = await getRedirectResponseIfExistFromConfig(request, config);
     return !rule ? undefined : {
         status: rule.status || '302',
         statusDescription: 'Found',
@@ -82,9 +90,54 @@ const getRedirectResponseIfExistForRequest = request => {
         },
     };
 }
-const getResponseForRequest = request => getRedirectResponseIfExistForRequest(request) || request;
+async function getRegionalS3OriginRequestIfNeededForRequest(request, config) {
+    if (!request || !request.origin || !request.origin.s3) return undefined;
+    const buckets = JSON.parse(request.headers['x-next-buckets'] || "{}");
+    // @todo do a better selection
+    const bucket = Object.values(buckets);
+    request.origin = {
+        s3: {
+            domainName: bucket.domain,
+            region: '',
+            authMethod: 'none',
+            path: request.origin.s3.path,
+            customHeaders: {}
+        }
+    }
+    request.headers['host'] = [{ key: 'host', value: bucket.domain}]
+    return request;
+}
+async function getRegionalApiGatewayOriginRequestIfNeededForRequest(request, config) {
+    if (!request || !request.origin || !request.origin.custom) return undefined;
+    const apps = JSON.parse(request.headers['x-next-apps'] || "{}");
+    // @todo do a better selection
+    const app = Object.values(apps);
+    request.origin = {
+        custom: {
+            domainName: app.domain,
+            port: 443,
+            protocol: 'https',
+            path: request.origin.path,
+            sslProtocols: ['TLSv1', 'TLSv1.1', 'TLSv1.2'],
+            readTimeout: 5,
+            keepaliveTimeout: 5,
+            customHeaders: {},
+        }
+    }
+    request.headers['host'] = [{ key: 'host', value: app.domain}]
+    return request;
+}
+
+async function processRequest(request) {
+    let config = require('./config');
+    if ('function' === typeof config) config = config(request);
+    let result = await getRedirectResponseIfExistForRequest(request, config);
+    result = result || await getRegionalS3OriginRequestIfNeededForRequest(request, config);
+    result = result || await getRegionalApiGatewayOriginRequestIfNeededForRequest(request, config);
+    return result || request;
+}
 
 module.exports = {
     buildDefaultResponse,
-    getResponseForRequest,
+    processRequest,
 }

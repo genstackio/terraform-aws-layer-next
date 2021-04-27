@@ -10,6 +10,14 @@ resource "aws_cloudfront_distribution" "webapp" {
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
     }
+    custom_header {
+      name  = "X-Next-Buckets"
+      value = local.header_x_next_buckets
+    }
+    custom_header {
+      name  = "X-Next-Apps"
+      value = local.header_x_next_apps
+    }
   }
   // dynamics => /* (failover: after having tried 'cached' origin, this one is calling the api-gateway with Nextjs lambda)
   origin {
@@ -18,6 +26,14 @@ resource "aws_cloudfront_distribution" "webapp" {
     custom_header {
       name  = "X-Forwarded-For"
       value = var.dns
+    }
+    custom_header {
+      name  = "X-Next-Buckets"
+      value = local.header_x_next_buckets
+    }
+    custom_header {
+      name  = "X-Next-Apps"
+      value = local.header_x_next_apps
     }
     custom_origin_config {
       http_port = 80
@@ -33,6 +49,14 @@ resource "aws_cloudfront_distribution" "webapp" {
     origin_path = "/publics"
     s3_origin_config {
       origin_access_identity = aws_cloudfront_origin_access_identity.oai.cloudfront_access_identity_path
+    }
+    custom_header {
+      name  = "X-Next-Buckets"
+      value = local.header_x_next_buckets
+    }
+    custom_header {
+      name  = "X-Next-Apps"
+      value = local.header_x_next_apps
     }
   }
 

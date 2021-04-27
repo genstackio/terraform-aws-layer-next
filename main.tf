@@ -21,6 +21,8 @@ module "cdn" {
   name                        = var.name
   custom_behaviors            = var.custom_behaviors
   s3_master_domain_name       = var.s3_master_domain_name
+  regional_statics_buckets    = var.regional_statics_buckets
+  regional_next_apps          = var.regional_next_apps
   providers                   = {
     aws = aws
   }

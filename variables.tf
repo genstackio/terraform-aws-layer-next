@@ -33,13 +33,17 @@ variable "origin_response_config_file" {
   default = null
 }
 variable "regional_next_apps" {
-  type    = map(string)
+  type = map(object({
+    endpoint = string
+    domain = string
+  }))
   default = {}
 }
 variable "regional_statics_buckets" {
   type = map(object({
     arn  = string
     name = string
+    domain = string
   }))
   default = {}
 }
