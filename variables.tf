@@ -43,3 +43,6 @@ variable "regional_statics_buckets" {
   }))
   default = {}
 }
+variable "s3_master_domain_name" {
+  type = string
+}

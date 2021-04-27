@@ -35,3 +35,6 @@ variable "custom_behaviors" {
   type    = list(any)
   default = null
 }
+variable "s3_master_domain_name" {
+  type = string
+}

@@ -4,7 +4,7 @@ resource "aws_cloudfront_origin_access_identity" "oai" {
 resource "aws_cloudfront_distribution" "webapp" {
   // statics => /_next/static/* (to be fetched with path '/statics/_next/static/*' on the s3 bucket)
   origin {
-    domain_name = "statics.origins.genstackio.io" // unused domain name
+    domain_name = var.s3_master_domain_name // unused domain name
     origin_id   = "statics"
     origin_path = "/statics"
     s3_origin_config {
@@ -13,7 +13,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   }
   // cached => /* (to be tried with path '/dynamics/*' on the s3 bucket)
   origin {
-    domain_name = "cached.origins.genstackio.io" // unused domain name
+    domain_name = var.s3_master_domain_name // unused domain name
     origin_id   = "cached"
     origin_path = "/dynamics"
     s3_origin_config {
@@ -37,7 +37,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   }
   // publics => /*.* (to be fetched with path '/publics/*.*' on the s3 bucket)
   origin {
-    domain_name = "publics.origins.genstackio.io" // unused domain name
+    domain_name = var.s3_master_domain_name // unused domain name
     origin_id   = "publics"
     origin_path = "/publics"
     s3_origin_config {
