@@ -34,7 +34,7 @@ data "aws_iam_policy_document" "s3_replication_policy" {
       "s3:GetReplicationConfiguration",
       "s3:ListBucket"
     ]
-    resource = [
+    resources = [
       aws_s3_bucket.statics.arn
     ]
     effect = "Allow"
@@ -45,7 +45,7 @@ data "aws_iam_policy_document" "s3_replication_policy" {
       "s3:GetObjectVersionAcl",
       "s3:GetObjectVersionTagging"
     ]
-    resource = [
+    resources = [
       "${aws_s3_bucket.statics.arn}/*"
     ]
     effect = "Allow"
@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "s3_replication_policy" {
       "s3:ReplicateDelete",
       "s3:ReplicateTags"
     ]
-    resource = [for r in var.replications: "${lookup(r, "arn")}/*"]
+    resources = [for r in var.replications: "${lookup(r, "arn")}/*"]
     effect = "Allow"
   }
 }
