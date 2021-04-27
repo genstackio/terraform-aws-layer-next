@@ -92,45 +92,44 @@ async function getRedirectResponseIfExistForRequest(request, config) {
 }
 async function getRegionalS3OriginRequestIfNeededForRequest(request, config) {
     if (!request || !request.origin || !request.origin.s3) return undefined;
-    const buckets = getJsonEncodedHeaderValue(request, 'x-next-buckets');
+    const buckets = getJsonEncodedCustomHeaderValue(request.origin.s3, 'x-next-buckets');
     // @todo do a better selection
     const bucket = Object.values(buckets);
     console.log(JSON.stringify({buckets, bucket}));
     request.origin = {
         s3: {
             domainName: bucket.domain,
-            region: '',
-            authMethod: 'none',
+            region: request.origin.s3.region,
+            authMethod: request.origin.s3.authMethod,
             path: request.origin.s3.path,
             customHeaders: {}
         }
     }
-    request.headers['host'] = [{ key: 'host', value: bucket.domain}]
+    request.headers['host'] = [{ key: 'Host', value: bucket.domain}]
     return request;
 }
-function getJsonEncodedHeaderValue(request, key) {
-    console.log(JSON.stringify(request, key));
-    return JSON.parse(((request.headers[key.toLowerCase()] || [])[0] || {}).value || '{}');
+function getJsonEncodedCustomHeaderValue(origin, key) {
+    return JSON.parse(((origin.customHeaders[key.toLowerCase()] || [])[0] || {}).value || '{}');
 }
 async function getRegionalApiGatewayOriginRequestIfNeededForRequest(request, config) {
     if (!request || !request.origin || !request.origin.custom) return undefined;
-    const apps = getJsonEncodedHeaderValue(request, 'x-next-apps');
+    const apps = getJsonEncodedCustomHeaderValue(request.origin.custom, 'x-next-apps');
     // @todo do a better selection
     const app = Object.values(apps);
     console.log(JSON.stringify({apps, app}));
     request.origin = {
         custom: {
             domainName: app.domain,
-            port: 443,
-            protocol: 'https',
-            path: request.origin.path,
-            sslProtocols: ['TLSv1', 'TLSv1.1', 'TLSv1.2'],
-            readTimeout: 5,
-            keepaliveTimeout: 5,
+            port: request.origin.custom.port,
+            protocol: request.origin.custom.protocol,
+            path: request.origin.custom.path,
+            sslProtocols: request.origin.custom.sslProtocols,
+            readTimeout: request.origin.custom.readTimeout,
+            keepaliveTimeout: request.origin.custom.keepaliveTimeout,
             customHeaders: {},
         }
     }
-    request.headers['host'] = [{ key: 'host', value: app.domain}]
+    request.headers['host'] = [{ key: 'Host', value: app.domain}]
     return request;
 }
 
