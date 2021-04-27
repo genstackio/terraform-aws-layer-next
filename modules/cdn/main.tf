@@ -140,7 +140,6 @@ resource "aws_cloudfront_distribution" "webapp" {
     cached_methods           = ["GET", "HEAD"]
     target_origin_id         = "servers"
     viewer_protocol_policy   = "redirect-to-https"
-    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.managed_cors_s3_origin.id
     compress                 = true
     min_ttl                  = 0
     default_ttl              = 3600
@@ -160,7 +159,6 @@ resource "aws_cloudfront_distribution" "webapp" {
     cached_methods           = ["GET", "HEAD"]
     target_origin_id         = "dynamics"
     viewer_protocol_policy   = "redirect-to-https"
-    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.managed_cors_s3_origin.id
     compress                 = true
     min_ttl                  = 0
     default_ttl              = 3600
