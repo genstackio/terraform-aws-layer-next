@@ -21,12 +21,9 @@ resource "aws_cloudfront_distribution" "webapp" {
   }
   // dynamics => /* (failover: after having tried 'cached' origin, this one is calling the api-gateway with Nextjs lambda)
   origin {
-    domain_name = "genstackio.io" // unused domain name
+    domain_name = var.s3_master_domain_name // unused domain name
     origin_id   = "dynamics"
-    custom_header {
-      name  = "X-Forwarded-For"
-      value = var.dns
-    }
+    origin_path = ""
     custom_header {
       name  = "X-Next-Buckets"
       value = local.header_x_next_buckets
@@ -39,7 +36,7 @@ resource "aws_cloudfront_distribution" "webapp" {
       http_port = 80
       https_port = 443
       origin_protocol_policy = "https-only"
-      origin_ssl_protocols = ["TLSv1", "TLSv1.1", "TLSv1.2"]
+      origin_ssl_protocols = ["SSLv3", "TLSv1", "TLSv1.1", "TLSv1.2"]
     }
   }
   // publics => /*.* (to be fetched with path '/publics/*.*' on the s3 bucket)
