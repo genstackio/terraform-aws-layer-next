@@ -90,11 +90,26 @@ async function getRedirectResponseIfExistForRequest(request, config) {
         },
     };
 }
+function selectRegionalItem(items, region) {
+    const tries = {
+        'eu-west-3': ['eu-west-3', 'eu-west-2', 'eu-central-1', 'eu-west-1', 'us-east-1', 'us-west-1'],
+        'eu-west-2': ['eu-west-2', 'eu-west-3', 'eu-central-1', 'eu-west-1', 'us-east-1', 'us-west-1'],
+        'eu-west-1': ['eu-west-1', 'eu-west-2', 'eu-west-3', 'eu-central-1', 'us-east-1', 'us-west-1'],
+        'eu-central-1': ['eu-central-1', 'eu-west-3', 'eu-west-2', 'eu-west-1', 'us-east-1', 'us-west-1'],
+        'us-east-1': ['us-east-1', 'us-west-1', 'eu-west-1', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
+        'us-west-1': ['us-west-1', 'us-east-1', 'eu-west-1', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
+        'eu': ['eu-west-1', 'eu-west-2', 'eu-west-3', 'eu-central-1', 'us-east-1', 'us-west-1'],
+        'us': ['us-east-1', 'us-west-1', 'eu-west-1', 'eu-west-2', 'eu-west-3', 'eu-central-1'],
+        '*': ['eu-west-3', 'eu-west-2', 'eu-west-1', 'eu-central-1', 'us-east-1', 'us-west-1'],
+    }
+    const z = tries[region] || tries[region.split('-')[0]] || tries['*'];
+    return items[z.find(i => !!items[i]) || region];
+}
+
 async function getRegionalS3OriginRequestIfNeededForRequest(request, config) {
     if (!request || !request.origin || !request.origin.s3) return undefined;
     const buckets = getJsonEncodedCustomHeaderValue(request.origin.s3, 'x-next-buckets');
-    // @todo do a better selection
-    const bucket = Object.values(buckets)[0];
+    const bucket = selectRegionalItem(buckets, request.origin.s3.region);
     console.log(JSON.stringify({buckets, bucket}));
     request.origin = {
         s3: {
@@ -139,6 +154,7 @@ async function processRequest(request) {
     let result = await getRedirectResponseIfExistForRequest(request, config);
     result = result || await getRegionalS3OriginRequestIfNeededForRequest(request, config);
     result = result || await getRegionalApiGatewayOriginRequestIfNeededForRequest(request, config);
+    console.log({result: JSON.stringify(result), request: JSON.stringify(request)});
     return result || request;
 }
 
