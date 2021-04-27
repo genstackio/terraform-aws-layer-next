@@ -125,7 +125,7 @@ resource "aws_cloudfront_distribution" "webapp" {
     path_pattern             = "/api/*"
     allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
     cached_methods           = ["GET", "HEAD"]
-    target_origin_id         = "servers"
+    target_origin_id         = "dynamics"
     viewer_protocol_policy   = "redirect-to-https"
     compress                 = true
     min_ttl                  = 0
@@ -154,7 +154,7 @@ resource "aws_cloudfront_distribution" "webapp" {
     path_pattern             = "/*"
     allowed_methods          = ["GET", "HEAD", "OPTIONS", "DELETE", "PATCH", "POST", "PUT"]
     cached_methods           = ["GET", "HEAD"]
-    target_origin_id         = "servers"
+    target_origin_id         = "dynamics"
     viewer_protocol_policy   = "redirect-to-https"
     compress                 = true
     min_ttl                  = 0
