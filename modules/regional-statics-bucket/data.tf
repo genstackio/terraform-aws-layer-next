@@ -56,7 +56,7 @@ data "aws_iam_policy_document" "s3_replication_policy" {
       "s3:ReplicateDelete",
       "s3:ReplicateTags"
     ]
-    resources = [for r in var.replications: "${lookup(r, "arn")}/*"]
+    resources = [for r in var.replications: "${r}/*"]
     effect = "Allow"
   }
 }
