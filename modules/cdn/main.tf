@@ -82,7 +82,7 @@ resource "aws_cloudfront_distribution" "webapp" {
   price_class         = var.price_class
 
   default_cache_behavior {
-    allowed_methods  = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
     cached_methods   = ["GET", "HEAD"]
     target_origin_id = "dynamics"
     compress         = true
@@ -155,13 +155,32 @@ resource "aws_cloudfront_distribution" "webapp" {
 
   ordered_cache_behavior {
     path_pattern             = "/*"
-    allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    allowed_methods          = ["GET", "HEAD", "OPTIONS"]
     cached_methods           = ["GET", "HEAD"]
     target_origin_id         = "dynamics"
     viewer_protocol_policy   = "redirect-to-https"
     compress                 = true
     min_ttl                  = 0
     default_ttl              = 3600
+    max_ttl                  = 86400
+    forwarded_values {
+      query_string = true
+      cookies {
+        forward = "all"
+      }
+      headers = local.forwarded_headers
+    }
+  }
+
+  ordered_cache_behavior {
+    path_pattern             = "/*"
+    allowed_methods          = ["DELETE", "PATCH", "POST", "PUT"]
+    cached_methods           = []
+    target_origin_id         = "servers"
+    viewer_protocol_policy   = "redirect-to-https"
+    compress                 = true
+    min_ttl                  = 0
+    default_ttl              = 0
     max_ttl                  = 86400
     forwarded_values {
       query_string = true
