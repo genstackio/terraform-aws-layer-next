@@ -17,7 +17,7 @@ resource "aws_s3_bucket" "statics" {
   dynamic "replication_configuration" {
     for_each = local.is_replication_master ? {x: true} : {}
     content {
-      role = aws_iam_role.replication.arn
+      role = aws_iam_role.replication[0].arn
       rules {
         id     = "all"
         status = "Enabled"
