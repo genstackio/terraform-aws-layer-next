@@ -174,7 +174,7 @@ resource "aws_cloudfront_distribution" "webapp" {
 
   ordered_cache_behavior {
     path_pattern             = "/*"
-    allowed_methods          = ["DELETE", "PATCH", "POST", "PUT"]
+    allowed_methods          = ["GET", "HEAD", "OPTIONS", "DELETE", "PATCH", "POST", "PUT"]
     cached_methods           = []
     target_origin_id         = "servers"
     viewer_protocol_policy   = "redirect-to-https"
