@@ -24,7 +24,7 @@ resource "aws_s3_bucket" "statics" {
         dynamic "destination" {
           for_each = toset(var.replications)
           content {
-            bucket        = destination.value.arn
+            bucket        = destination.value
             storage_class = "STANDARD"
           }
         }
