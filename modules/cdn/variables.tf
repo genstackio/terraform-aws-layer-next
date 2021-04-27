@@ -23,11 +23,11 @@ variable "price_class" {
   type    = string
   default = "PriceClass_100"
 }
-variable "redirect_config_file" {
+variable "origin_request_config_file" {
   type    = string
   default = null
 }
-variable "security_config_file" {
+variable "origin_response_config_file" {
   type    = string
   default = null
 }
