@@ -52,6 +52,6 @@ resource "aws_iam_policy" "replication" {
 
 resource "aws_iam_role_policy_attachment" "replication" {
   count      = local.replication_master_count
-  role       = aws_iam_role.replication.name
-  policy_arn = aws_iam_policy.replication.arn
+  role       = aws_iam_role.replication[0].name
+  policy_arn = aws_iam_policy.replication[0].arn
 }
