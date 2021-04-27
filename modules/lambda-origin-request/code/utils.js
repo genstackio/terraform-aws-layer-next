@@ -92,7 +92,7 @@ async function getRedirectResponseIfExistForRequest(request, config) {
 }
 async function getRegionalS3OriginRequestIfNeededForRequest(request, config) {
     if (!request || !request.origin || !request.origin.s3) return undefined;
-    const buckets = JSON.parse(((request.headers['x-next-buckets'] || [])[0] || {}).value || "{}");
+    const buckets = getJsonEncodedHeaderValue(request, 'x-next-buckets');
     // @todo do a better selection
     const bucket = Object.values(buckets);
     console.log(JSON.stringify({buckets, bucket}));
@@ -108,9 +108,13 @@ async function getRegionalS3OriginRequestIfNeededForRequest(request, config) {
     request.headers['host'] = [{ key: 'host', value: bucket.domain}]
     return request;
 }
+function getJsonEncodedHeaderValue(request, key) {
+    console.log(JSON.stringify(request, key));
+    return JSON.parse(((request.headers[key.toLowerCase()] || [])[0] || {}).value || '{}');
+}
 async function getRegionalApiGatewayOriginRequestIfNeededForRequest(request, config) {
     if (!request || !request.origin || !request.origin.custom) return undefined;
-    const apps = JSON.parse(((request.headers['x-next-apps'] || [])[0] || {}).value || "{}");
+    const apps = getJsonEncodedHeaderValue(request, 'x-next-apps');
     // @todo do a better selection
     const app = Object.values(apps);
     console.log(JSON.stringify({apps, app}));
