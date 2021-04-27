@@ -94,7 +94,7 @@ async function getRegionalS3OriginRequestIfNeededForRequest(request, config) {
     if (!request || !request.origin || !request.origin.s3) return undefined;
     const buckets = getJsonEncodedCustomHeaderValue(request.origin.s3, 'x-next-buckets');
     // @todo do a better selection
-    const bucket = Object.values(buckets);
+    const bucket = Object.values(buckets)[0];
     console.log(JSON.stringify({buckets, bucket}));
     request.origin = {
         s3: {
@@ -115,7 +115,7 @@ async function getRegionalApiGatewayOriginRequestIfNeededForRequest(request, con
     if (!request || !request.origin || !request.origin.custom) return undefined;
     const apps = getJsonEncodedCustomHeaderValue(request.origin.custom, 'x-next-apps');
     // @todo do a better selection
-    const app = Object.values(apps);
+    const app = Object.values(apps)[0];
     console.log(JSON.stringify({apps, app}));
     request.origin = {
         custom: {
