@@ -16,6 +16,5 @@ locals {
     "Access-Control-Request-Headers",
     "Access-Control-Request-Method",
     "User-Agent",
-    "X-Forwarded-For",
   ]
 }
