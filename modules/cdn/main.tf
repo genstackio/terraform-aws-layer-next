@@ -150,7 +150,7 @@ resource "aws_cloudfront_distribution" "webapp" {
     viewer_protocol_policy   = "redirect-to-https"
     compress                 = true
     min_ttl                  = 0
-    default_ttl              = 3600
+    default_ttl              = 0
     max_ttl                  = 86400
     forwarded_values {
       query_string = true
