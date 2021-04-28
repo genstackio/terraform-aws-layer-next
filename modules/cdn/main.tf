@@ -214,25 +214,13 @@ resource "aws_cloudfront_distribution" "webapp" {
     }
   }
 
-  custom_error_response {
-    error_code         = 403
-    response_code      = 403
-    response_page_path = "/403"
-  }
-  custom_error_response {
-    error_code         = 404
-    response_code      = 404
-    response_page_path = "/404"
-  }
-  custom_error_response {
-    error_code         = 500
-    response_code      = 500
-    response_page_path = "/500"
-  }
-  custom_error_response {
-    error_code         = 502
-    response_code      = 502
-    response_page_path = "/502"
+  dynamic "custom_error_response" {
+    for_each = toset(var.custom_error_responses)
+    content {
+      error_code         = custom_error_response.value.error_code
+      response_code      = custom_error_response.value.response_code
+      response_page_path = custom_error_response.value.response_page_path
+    }
   }
 }
 
